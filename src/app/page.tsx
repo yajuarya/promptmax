@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Sparkles, Code, FileText, Zap, Copy, Download, BarChart3, Search, GraduationCap, Briefcase, Lightbulb, CheckCircle } from 'lucide-react'
 
-export default function PromptCraft() {
+export default function PromptMax() {
   const [prompt, setPrompt] = useState('')
   const [jsonOutput, setJsonOutput] = useState('')
   const [activeTemplate, setActiveTemplate] = useState('')
@@ -28,7 +28,14 @@ Requirements:
 - Be creative and engaging
 - Follow the specified style and tone
 - Include vivid descriptions
-- Maintain consistency throughout`
+- Maintain consistency throughout
+
+Output Format:
+Please structure your response as follows:
+- Title/Headline
+- Main content in paragraphs
+- Key themes or messages (bulleted list)
+- Suggested improvements or variations`
     },
     marketing: {
       name: 'Marketing Copy',
@@ -46,7 +53,15 @@ Requirements:
 - Include clear call-to-action
 - Highlight unique value proposition
 - Use persuasive language
-- Optimize for the specified platform`
+- Optimize for the specified platform
+
+Output Format:
+Deliver the marketing copy in this structured format:
+- Primary Headline
+- Secondary Headlines (2-3 options)
+- Body Copy (main content)
+- Call-to-Action Options (list format)
+- Platform-specific adaptations`
     },
     coding: {
       name: 'Code Generation',
@@ -63,7 +78,15 @@ Please provide:
 - Best practices implementation
 - Error handling where appropriate
 - Performance considerations
-- Brief explanation of the solution`
+- Brief explanation of the solution
+
+Output Format:
+Structure your response as:
+1. Code Solution (properly formatted code block)
+2. Implementation Notes (bulleted list)
+3. Usage Examples
+4. Performance Considerations
+5. Alternative Approaches (if applicable)`
     },
     analysis: {
       name: 'Data Analysis',
@@ -80,7 +103,16 @@ Please provide:
 - Data visualization recommendations
 - Key findings and patterns
 - Actionable recommendations
-- Potential limitations or caveats`
+- Potential limitations or caveats
+
+Output Format:
+Present your analysis in this structured format:
+1. Executive Summary
+2. Key Findings (numbered list)
+3. Statistical Insights (with metrics)
+4. Visualization Recommendations
+5. Actionable Recommendations (prioritized list)
+6. Limitations and Assumptions`
     },
     research: {
       name: 'Research Assistant',
@@ -97,7 +129,16 @@ Requirements:
 - Include credible sources
 - Present multiple perspectives
 - Summarize key findings
-- Suggest further research directions`
+- Suggest further research directions
+
+Output Format:
+Organize your research in this structure:
+1. Topic Overview
+2. Key Findings (bulleted list with sources)
+3. Multiple Perspectives (comparative format)
+4. Source Summary (categorized list)
+5. Research Gaps and Future Directions
+6. Recommended Reading/Sources`
     },
     education: {
       name: 'Educational Content',
@@ -115,7 +156,16 @@ Requirements:
 - Progressive difficulty structure
 - Interactive elements where appropriate
 - Assessment opportunities
-- Real-world applications`
+- Real-world applications
+
+Output Format:
+Structure the educational content as:
+1. Learning Objectives (bulleted list)
+2. Main Content (organized sections)
+3. Key Concepts Summary
+4. Practice Exercises or Examples
+5. Assessment Questions
+6. Additional Resources (list format)`
     },
     business: {
       name: 'Business Strategy',
@@ -133,7 +183,16 @@ Deliverables:
 - Implementation roadmap
 - Risk assessment
 - Success metrics
-- Resource allocation suggestions`
+- Resource allocation suggestions
+
+Output Format:
+Present your strategic analysis in this format:
+1. Situation Analysis
+2. Strategic Recommendations (prioritized list)
+3. Implementation Roadmap (timeline format)
+4. Risk Assessment (categorized list)
+5. Success Metrics and KPIs
+6. Resource Requirements and Allocation`
     },
     creative: {
       name: 'Creative Brainstorming',
@@ -151,14 +210,23 @@ Generate:
 - Unique approaches and angles
 - Implementation possibilities
 - Potential variations
-- Next steps for development`
-  }
+- Next steps for development
+
+Output Format:
+Structure your creative ideas in this format:
+1. Top 5 Creative Concepts (numbered list with descriptions)
+2. Unique Approaches (bulleted list)
+3. Implementation Strategies
+4. Concept Variations and Adaptations
+5. Next Steps for Development (actionable list)
+6. Inspiration Sources and References`
+    }
 
   }
 
   // Load history from localStorage on component mount
   React.useEffect(() => {
-    const savedHistory = localStorage.getItem('promptcraft-history')
+    const savedHistory = localStorage.getItem('promptmax-history')
     if (savedHistory) {
       setPromptHistory(JSON.parse(savedHistory))
     }
@@ -174,7 +242,7 @@ Generate:
     }
     const updatedHistory = [newEntry, ...promptHistory].slice(0, 50) // Keep last 50
     setPromptHistory(updatedHistory)
-    localStorage.setItem('promptcraft-history', JSON.stringify(updatedHistory))
+    localStorage.setItem('promptmax-history', JSON.stringify(updatedHistory))
   }
 
   // Toggle favorite
@@ -183,7 +251,7 @@ Generate:
       item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
     )
     setPromptHistory(updatedHistory)
-    localStorage.setItem('promptcraft-history', JSON.stringify(updatedHistory))
+    localStorage.setItem('promptmax-history', JSON.stringify(updatedHistory))
   }
 
   // Load prompt from history
@@ -235,7 +303,7 @@ Generate:
     }
 
     // Check for output format specification
-    if (!promptText.toLowerCase().includes('format') && !promptText.toLowerCase().includes('structure') && !promptText.toLowerCase().includes('json') && !promptText.toLowerCase().includes('list')) {
+    if (!promptText.toLowerCase().includes('format') && !promptText.toLowerCase().includes('structure') && !promptText.toLowerCase().includes('json') && !promptText.toLowerCase().includes('list') && !promptText.toLowerCase().includes('output format') && !promptText.toLowerCase().includes('output format:')) {
       issues.push('No output format specified')
       suggestions.push('Specify desired output format (JSON, list, paragraph, etc.)')
       score -= 10
@@ -346,7 +414,7 @@ Generate:
       parameters: getOptimizedParameters(activeTemplate || 'custom'),
       metadata: {
         version: '2.0',
-        generated_by: 'PromptCraft',
+        generated_by: 'PromptMax',
         template_used: activeTemplate ? templates[activeTemplate as keyof typeof templates]?.name : 'Custom',
         optimization_suggestions: generateSuggestions(),
         best_practices: [
@@ -361,8 +429,42 @@ Generate:
     setJsonOutput(JSON.stringify(jsonStructure, null, 2))
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const copyToClipboard = async (text: string) => {
+    try {
+      // Check if clipboard API is available and we're in a secure context
+      if (navigator?.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(text)
+        console.log('Text copied to clipboard via Clipboard API')
+        return
+      }
+    } catch (err) {
+      console.warn('Clipboard API failed, using fallback:', err)
+    }
+    
+    // Fallback method for all cases
+    try {
+      const textArea = document.createElement('textarea')
+      textArea.value = text
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      
+      const successful = document.execCommand('copy')
+      document.body.removeChild(textArea)
+      
+      if (successful) {
+        console.log('Text copied to clipboard via fallback method')
+      } else {
+        throw new Error('Copy command failed')
+      }
+    } catch (err) {
+      console.error('All copy methods failed:', err)
+      // Final fallback - show user the text to copy manually
+      alert('Copy failed. Please manually copy this text:\n\n' + text)
+    }
   }
 
   const downloadJSON = () => {
@@ -384,19 +486,19 @@ Generate:
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center space-x-3">
               <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-xl">
                 <Sparkles className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                  PromptCraft
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  PromptMax
                 </h1>
-                <p className="text-sm text-gray-600">AI Prompt Engineering Assistant</p>
+                <p className="text-xs sm:text-sm text-gray-600">AI Prompt Engineering Assistant</p>
               </div>
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-xs sm:text-sm text-gray-500 text-center sm:text-right">
               Build better prompts, generate structured JSON
             </div>
           </div>
@@ -507,28 +609,28 @@ Generate:
                 placeholder="Enter your prompt here... Use templates above for quick start!"
                 className="w-full h-80 p-4 border border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
               />
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-4 gap-4">
                 <div className="text-sm text-gray-500">
                   {prompt.length} characters
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                   <button
                     onClick={() => copyToClipboard(prompt)}
-                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center space-x-2"
+                    className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
                   >
                     <Copy className="h-4 w-4" />
                     <span>Copy</span>
                   </button>
                   <button
                     onClick={generateJSON}
-                    className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl"
+                    className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
                     <span>Generate JSON</span>
                   </button>
                   <button
                     onClick={runValidation}
-                    className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="flex items-center justify-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
                     <CheckCircle className="h-4 w-4" />
                     <span>Validate Prompt</span>
@@ -657,7 +759,7 @@ Generate:
         {/* Features Section */}
         <div className="mt-12 bg-white rounded-2xl shadow-xl border border-purple-100 p-8">
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
-            Why Choose PromptCraft?
+            Why Choose PromptMax?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">

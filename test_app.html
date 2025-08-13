@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PromptMax E2E Test</title>
+    <script>
+        async function testApp() {
+            console.log('Starting PromptMax E2E Test...');
+            
+            // Test 1: Check if app loads
+            try {
+                const response = await fetch('http://172.171.199.162:3000');
+                const html = await response.text();
+                console.log('✓ App loads successfully');
+                
+                // Test 2: Check if PromptMax branding is present
+                if (html.includes('PromptMax')) {
+                    console.log('✓ PromptMax branding found');
+                } else {
+                    console.log('✗ PromptMax branding missing');
+                }
+                
+                // Test 3: Check if Copy functionality exists
+                if (html.includes('Copy') || html.includes('clipboard')) {
+                    console.log('✓ Copy functionality present in HTML');
+                } else {
+                    console.log('✗ Copy functionality missing');
+                }
+                
+                // Test 4: Check if templates are present
+                if (html.includes('template')) {
+                    console.log('✓ Templates functionality present');
+                } else {
+                    console.log('✗ Templates functionality missing');
+                }
+                
+            } catch (error) {
+                console.log('✗ App failed to load:', error.message);
+            }
+        }
+        
+        // Run test when page loads
+        window.onload = testApp;
+    </script>
+</head>
+<body>
+    <h1>PromptMax E2E Test Results</h1>
+    <p>Check browser console for test results...</p>
+    <p>App URL: <a href="http://172.171.199.162:3000" target="_blank">http://172.171.199.162:3000</a></p>
+</body>
+</html>

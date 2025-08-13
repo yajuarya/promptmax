@@ -1,0 +1,20 @@
+
+> promptmax@0.1.0 dev
+> next dev --turbopack --hostname 0.0.0.0 --port 3000
+
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://0.0.0.0:3000
+
+ ✓ Starting...
+ ✓ Ready in 1613ms
+ ○ Compiling / ...
+ ✓ Compiled / in 7.3s
+ HEAD / 200 in 7805ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 512ms
+ HEAD /favicon.ico 200 in 808ms
+ GET / 200 in 146ms
+ ⚠ Cross origin request detected from 172.171.199.162 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 249ms
