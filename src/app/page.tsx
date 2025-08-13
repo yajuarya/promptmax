@@ -785,6 +785,64 @@ Structure your creative ideas in this format:
             </div>
           </div>
         </div>
+
+        {/* FAQ Section */}
+        <div className="mt-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-xl border border-indigo-100 p-8">
+          <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <span className="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3">Q</span>
+                What is PromptMax and how does it work?
+              </h3>
+              <p className="text-gray-600 ml-9">
+                PromptMax is a professional AI prompt engineering platform that helps you create, optimize, and validate prompts for AI models. Simply select a template, customize your requirements, and get optimized prompts with real-time validation and suggestions.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <span className="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3">Q</span>
+                Do I need technical knowledge to use PromptMax?
+              </h3>
+              <p className="text-gray-600 ml-9">
+                Not at all! PromptMax is designed for both beginners and experts. Our intuitive interface and pre-built templates make it easy for anyone to create effective prompts, while advanced features cater to experienced prompt engineers.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <span className="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3">Q</span>
+                Can I export my prompts for use in other applications?
+              </h3>
+              <p className="text-gray-600 ml-9">
+                Yes! PromptMax supports multiple export formats including JSON for API integration, plain text for direct use, and structured formats for documentation. You can easily copy or download your optimized prompts.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <span className="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3">Q</span>
+                What types of prompts can I create with PromptMax?
+              </h3>
+              <p className="text-gray-600 ml-9">
+                PromptMax supports various prompt types including creative writing, technical documentation, marketing content, code generation, data analysis, educational content, and custom prompts for specific use cases.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <span className="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3">Q</span>
+                Is PromptMax free to use?
+              </h3>
+              <p className="text-gray-600 ml-9">
+                PromptMax offers a comprehensive free tier with access to core features and templates. Advanced features and premium templates may require a subscription, but you can accomplish most prompt engineering tasks with the free version.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
