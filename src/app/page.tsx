@@ -843,6 +843,21 @@ Structure your creative ideas in this format:
             </div>
           </div>
         </div>
+
+        {/* Creator Credit Section */}
+        <div className="mt-12 text-center py-8 border-t border-gray-200">
+          <p className="text-gray-600 text-lg">
+            Created by{' '}
+            <a 
+              href="http://yajuarya.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold transition-colors duration-200 underline decoration-2 underline-offset-2"
+            >
+              Yaju Arya
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   )
