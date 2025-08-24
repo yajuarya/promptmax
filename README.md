@@ -1,4 +1,4 @@
-# PromptCraft
+# PromptMax
 
 A powerful Next.js application designed for prompt engineers to write better prompts with AI assistance and JSON generation capabilities.
 
