@@ -11,6 +11,8 @@ export default function PromptMax() {
   const [showHistory, setShowHistory] = useState(false)
   const [validationResults, setValidationResults] = useState<{score: number, issues: string[], suggestions: string[]}>({score: 0, issues: [], suggestions: []})
   const [showValidation, setShowValidation] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
+  const [tooltipMessage, setTooltipMessage] = useState('')
 
   const templates = {
     writing: {
@@ -225,7 +227,7 @@ Structure your creative ideas in this format:
   }
 
   // Load history from localStorage on component mount
-  React.useEffect(() => {
+  useEffect(() => {
     const savedHistory = localStorage.getItem('promptmax-history')
     if (savedHistory) {
       setPromptHistory(JSON.parse(savedHistory))
@@ -333,6 +335,8 @@ Structure your creative ideas in this format:
       setValidationResults(results)
     }
     setShowValidation(true)
+    // Navigate to validation section
+    scrollToSection('validation-section')
   }
 
   const generateJSON = () => {
@@ -427,14 +431,28 @@ Structure your creative ideas in this format:
     }
 
     setJsonOutput(JSON.stringify(jsonStructure, null, 2))
+    // Navigate to JSON output section
+    scrollToSection('json-output-section')
   }
 
+
+  // Smooth scrolling navigation function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
   const copyToClipboard = async (text: string) => {
     try {
       // Check if clipboard API is available and we're in a secure context
       if (navigator?.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
         await navigator.clipboard.writeText(text)
         console.log('Text copied to clipboard via Clipboard API')
+        showSuccessTooltip()
         return
       }
     } catch (err) {
@@ -457,14 +475,31 @@ Structure your creative ideas in this format:
       
       if (successful) {
         console.log('Text copied to clipboard via fallback method')
+        showSuccessTooltip()
       } else {
         throw new Error('Copy command failed')
       }
     } catch (err) {
       console.error('All copy methods failed:', err)
-      // Final fallback - show user the text to copy manually
-      alert('Copy failed. Please manually copy this text:\n\n' + text)
+      // Show error tooltip instead of alert
+      showErrorTooltip()
     }
+  }
+
+  const showSuccessTooltip = () => {
+    setTooltipMessage('Copied to Clipboard')
+    setShowTooltip(true)
+    setTimeout(() => {
+      setShowTooltip(false)
+    }, 3000)
+  }
+
+  const showErrorTooltip = () => {
+    setTooltipMessage('Copy failed - please try again')
+    setShowTooltip(true)
+    setTimeout(() => {
+      setShowTooltip(false)
+    }, 3000)
   }
 
   const downloadJSON = () => {
@@ -479,10 +514,21 @@ Structure your creative ideas in this format:
   const applyTemplate = (templateKey: string) => {
     setActiveTemplate(templateKey)
     setPrompt(templates[templateKey as keyof typeof templates].prompt)
+    // Navigate to text input section
+    scrollToSection('text-input-section')
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+      {/* Tooltip */}
+      {showTooltip && (
+        <div className="fixed top-4 right-4 z-50 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 ease-in-out">
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="h-4 w-4" />
+            <span className="text-sm font-medium">{tooltipMessage}</span>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-purple-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -506,8 +552,54 @@ Structure your creative ideas in this format:
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* How to Use Section */}
+        <div className="mb-12 bg-white/70 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-purple-200 shadow-lg">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+              How to Use PromptMax
+            </h2>
+            <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
+              Transform your AI interactions with professionally optimized prompts in just a few simple steps
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border border-purple-100">
+              <div className="bg-gradient-to-br from-purple-600 to-purple-700 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg ring-4 ring-purple-100 transform hover:scale-105 transition-all duration-200">
+                <span className="text-white font-bold text-xl sm:text-2xl tracking-wide">1</span>
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Choose Template</h3>
+              <p className="text-gray-600 text-xs sm:text-sm">Select from our curated templates or start from scratch</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg ring-4 ring-blue-100 transform hover:scale-105 transition-all duration-200">
+                <span className="text-white font-bold text-xl sm:text-2xl tracking-wide">2</span>
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Customize Prompt</h3>
+              <p className="text-gray-600 text-xs sm:text-sm">Edit and personalize your prompt with specific requirements</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+              <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg ring-4 ring-indigo-100 transform hover:scale-105 transition-all duration-200">
+                <span className="text-white font-bold text-xl sm:text-2xl tracking-wide">3</span>
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Generate & Validate</h3>
+              <p className="text-gray-600 text-xs sm:text-sm">Create optimized JSON and validate prompt quality</p>
+            </div>
+            
+            <div className="text-center p-4 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl border border-green-100">
+              <div className="bg-gradient-to-br from-green-600 to-green-700 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg ring-4 ring-green-100 transform hover:scale-105 transition-all duration-200">
+                <span className="text-white font-bold text-xl sm:text-2xl tracking-wide">4</span>
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Copy & Use</h3>
+              <p className="text-gray-600 text-xs sm:text-sm">Copy your optimized prompt for use in any AI platform</p>
+            </div>
+          </div>
+        </div>
+
         {/* Template Selection */}
-        <div className="mb-8">
+        <div className="mb-8" id="templates-section">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Start Templates</h2>
           <div className="flex justify-between items-center mb-4">
             <span></span>
@@ -595,7 +687,7 @@ Structure your creative ideas in this format:
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Prompt Input */}
           <div className="bg-white rounded-2xl shadow-xl border border-purple-100">
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-6 border-b border-gray-100" id="text-input-section">
               <h2 className="text-xl font-semibold text-gray-800 flex items-center">
                 <FileText className="h-5 w-5 mr-2 text-purple-600" />
                 Prompt Editor
@@ -641,7 +733,7 @@ Structure your creative ideas in this format:
           </div>
 
           {/* JSON Output */}
-          <div className="bg-white rounded-2xl shadow-xl border border-purple-100">
+          <div className="bg-white rounded-2xl shadow-xl border border-purple-100" id="json-output-section">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-xl font-semibold text-gray-800 flex items-center">
                 <Code className="h-5 w-5 mr-2 text-blue-600" />
@@ -681,7 +773,7 @@ Structure your creative ideas in this format:
 
           {/* Validation Results */}
           {showValidation && (
-            <div className="bg-white rounded-2xl shadow-xl border border-purple-100">
+            <div className="bg-white rounded-2xl shadow-xl border border-purple-100" id="validation-section">
               <div className="p-6 border-b border-gray-100">
                 <h2 className="text-xl font-semibold text-gray-800 flex items-center">
                   <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
